@@ -25,6 +25,27 @@ function shuffle(array) {
     return array;
 }
 
+var allCards = document.querySelectorAll('.card');
+var openCards = [];
+
+allCards.forEach(function(card){
+  card.addEventListener('click', function(e){
+    if (!card.classList.contains('open') && !card.classList.contains('show') && !card.classList.contains('match')){
+      openCards.push(card);
+      card.classList.add('open','show');
+      if (openCards.length == 2){
+        setTimeout(function(){
+          openCards.forEach(function(card){
+            card.classList.remove('open','show');
+          });
+          openCards = [];
+        }, 1000);      
+    }
+    }
+  });
+});
+
+
 
 /*
  * set up the event listener for a card. If a card is clicked:
