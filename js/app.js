@@ -48,6 +48,13 @@ function initGame(){
 
 initGame();
 
+//Restarting Game
+var restart = document.querySelector('.restart');
+restart.addEventListener('click', function(e){
+  console.log('restart button has been clicked');
+  initGame();
+});
+
 var allCards = document.querySelectorAll('.card');
 var openCards = [];
 var matchedCardsPairs = 0;
