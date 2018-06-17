@@ -50,6 +50,50 @@ function initGame(){
   });
   console.log(cardHTML);
   deck.innerHTML = cardHTML.join(' ');
+  var allCards = document.querySelectorAll('.card');
+  var openCards = [];
+
+  allCards.forEach(function(card){
+    card.addEventListener('click', function(e){
+      if (!card.classList.contains('open') && !card.classList.contains('show') && !card.classList.contains('match') && openCards.length < 2){
+        openCards.push(card);
+        card.classList.add('open','show');
+        if (openCards.length == 2){
+          moveCounter += 1;
+          console.log('Moves number is: ' + moveCounter);
+
+          //if cards match:
+          if (openCards[0].dataset.card == openCards[1].dataset.card){
+            console.log('cards match');
+            openCards[0].classList.add('match');
+            openCards[1].classList.add('match');
+            openCards = [];
+            matchedCardsPairs += 1;
+            if (matchedCardsPairs == 8){
+              console.log('You won!');
+              var para = document.createElement("P");
+              var t = document.createTextNode('Congratulations you won in ' + moveCounter + ' moves!');
+              para.appendChild(t);
+              document.getElementsByClassName("modal-content")[0].appendChild(para);
+
+              modal.style.display = "block";
+            }
+          }
+
+          //if card do not match:
+          else {
+            setTimeout(function(){
+              openCards.forEach(function(card){
+                card.classList.remove('open','show');
+              });
+              openCards = [];
+            }, 1000);
+          }
+        }
+      }
+    });
+  });
+
 }
 
 initGame();
@@ -60,52 +104,6 @@ restart.addEventListener('click', function(e){
   console.log('restart button has been clicked');
   initGame();
 });
-
-var allCards = document.querySelectorAll('.card');
-var openCards = [];
-
-allCards.forEach(function(card){
-  card.addEventListener('click', function(e){
-    if (!card.classList.contains('open') && !card.classList.contains('show') && !card.classList.contains('match') && openCards.length < 2){
-      openCards.push(card);
-      card.classList.add('open','show');
-      if (openCards.length == 2){
-        moveCounter += 1;
-        console.log('Moves number is: ' + moveCounter);
-
-        //if cards match:
-        if (openCards[0].dataset.card == openCards[1].dataset.card){
-          console.log('cards match');
-          openCards[0].classList.add('match');
-          openCards[1].classList.add('match');
-          openCards = [];
-          matchedCardsPairs += 1;
-          if (matchedCardsPairs == 8){
-            console.log('You won!');
-            var para = document.createElement("P");
-            var t = document.createTextNode('Congratulations you won in ' + moveCounter + ' moves!');
-            para.appendChild(t);
-            document.getElementsByClassName("modal-content")[0].appendChild(para);
-
-            modal.style.display = "block";
-          }
-        }
-
-        //if card do not match:
-        else {
-          setTimeout(function(){
-            openCards.forEach(function(card){
-              card.classList.remove('open','show');
-            });
-            openCards = [];
-          }, 1000);
-        }
-      }
-    }
-  });
-});
-
-
 
 /*
  * set up the event listener for a card. If a card is clicked:
