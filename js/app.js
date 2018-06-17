@@ -82,6 +82,11 @@ allCards.forEach(function(card){
           matchedCardsPairs += 1;
           if (matchedCardsPairs == 8){
             console.log('You won!');
+            var para = document.createElement("P");
+            var t = document.createTextNode('Congratulations you won in ' + moveCounter + ' moves!');
+            para.appendChild(t);
+            document.getElementsByClassName("modal-content")[0].appendChild(para);
+
             modal.style.display = "block";
           }
         }
