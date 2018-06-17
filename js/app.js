@@ -50,6 +50,7 @@ initGame();
 
 var allCards = document.querySelectorAll('.card');
 var openCards = [];
+var matchedCardsPairs = 0;
 
 allCards.forEach(function(card){
   card.addEventListener('click', function(e){
@@ -64,6 +65,11 @@ allCards.forEach(function(card){
           openCards[0].classList.add('match');
           openCards[1].classList.add('match');
           openCards = [];
+          matchedCardsPairs += 1;
+          if (matchedCardsPairs == 8){
+            console.log('You won!');
+            modal.style.display = "block";
+          }
         }
 
         //if card do not match:
@@ -92,3 +98,25 @@ allCards.forEach(function(card){
  *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
  *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
  */
+
+
+ // Get the modal
+ var modal = document.getElementById('myModal');
+
+ // Get the button that opens the modal
+ var btn = document.getElementById("myBtn");
+
+ // Get the <span> element that closes the modal
+ var span = document.getElementsByClassName("close")[0];
+
+ // When the user clicks on <span> (x), close the modal
+ span.onclick = function() {
+     modal.style.display = "none";
+ }
+
+ // When the user clicks anywhere outside of the modal, close it
+ window.onclick = function(event) {
+     if (event.target == modal) {
+         modal.style.display = "none";
+     }
+ }
