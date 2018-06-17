@@ -2,6 +2,18 @@
  * Create a list that holds all of your cards
  */
 
+var cards = ['fa-diamond', 'fa-diamond',
+            'fa-paper-plane-o', 'fa-paper-plane-o',
+            'fa-bolt', 'fa-bolt',
+            'fa-cube', 'fa-cube',
+            'fa-anchor', 'fa-anchor',
+            'fa-leaf', 'fa-leaf',
+            'fa-bicycle', 'fa-bicycle',
+            'fa-bomb', 'fa-bomb'];
+
+function generateCard(card){
+  return `<li class="card"><i class="fa ${card}"></i></li>`;
+}
 
 /*
  * Display the cards on the page
@@ -21,9 +33,20 @@ function shuffle(array) {
         array[currentIndex] = array[randomIndex];
         array[randomIndex] = temporaryValue;
     }
-
+    
     return array;
 }
+
+function initGame(){
+  var deck = document.querySelector('.deck');
+  var cardHTML = shuffle(cards).map(function(card){
+    return generateCard(card);
+  });
+  console.log(cardHTML);
+  deck.innerHTML = cardHTML.join(' ');
+}
+
+initGame();
 
 var allCards = document.querySelectorAll('.card');
 var openCards = [];
@@ -39,7 +62,7 @@ allCards.forEach(function(card){
             card.classList.remove('open','show');
           });
           openCards = [];
-        }, 1000);      
+        }, 1000);
     }
     }
   });
