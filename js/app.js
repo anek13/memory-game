@@ -12,7 +12,7 @@ var cards = ['fa-diamond', 'fa-diamond',
             'fa-bomb', 'fa-bomb'];
 
 function generateCard(card){
-  return `<li class="card"><i class="fa ${card}"></i></li>`;
+  return `<li class="card" data-card = "fa ${card}"><i class="fa ${card}"></i></li>`;
 }
 
 /*
@@ -33,7 +33,7 @@ function shuffle(array) {
         array[currentIndex] = array[randomIndex];
         array[randomIndex] = temporaryValue;
     }
-    
+
     return array;
 }
 
@@ -57,13 +57,25 @@ allCards.forEach(function(card){
       openCards.push(card);
       card.classList.add('open','show');
       if (openCards.length == 2){
-        setTimeout(function(){
-          openCards.forEach(function(card){
-            card.classList.remove('open','show');
-          });
+        
+        //if cards match:
+        if (openCards[0].dataset.card == openCards[1].dataset.card){
+          console.log('cards match');
+          openCards[0].classList.add('match');
+          openCards[1].classList.add('match');
           openCards = [];
-        }, 1000);
-    }
+        }
+
+        //if card do not match:
+        else {
+          setTimeout(function(){
+            openCards.forEach(function(card){
+              card.classList.remove('open','show');
+            });
+            openCards = [];
+          }, 1000);
+        }
+      }
     }
   });
 });
