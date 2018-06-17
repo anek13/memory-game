@@ -53,11 +53,11 @@ var openCards = [];
 
 allCards.forEach(function(card){
   card.addEventListener('click', function(e){
-    if (!card.classList.contains('open') && !card.classList.contains('show') && !card.classList.contains('match')){
+    if (!card.classList.contains('open') && !card.classList.contains('show') && !card.classList.contains('match') && openCards.length < 2){
       openCards.push(card);
       card.classList.add('open','show');
       if (openCards.length == 2){
-        
+
         //if cards match:
         if (openCards[0].dataset.card == openCards[1].dataset.card){
           console.log('cards match');
