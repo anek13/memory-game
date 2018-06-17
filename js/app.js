@@ -14,7 +14,6 @@ var cards = ['fa-diamond', 'fa-diamond',
 var matchedCardsPairs = 0;
 var moveCounter = 0;
 
-
 function generateCard(card){
   return `<li class="card" data-card = "fa ${card}"><i class="fa ${card}"></i></li>`;
 }
@@ -60,7 +59,7 @@ function initGame(){
         card.classList.add('open','show');
         if (openCards.length == 2){
           moveCounter += 1;
-          console.log('Moves number is: ' + moveCounter);
+          document.getElementById('moveCount').innerHTML = moveCounter;
 
           //if cards match:
           if (openCards[0].dataset.card == openCards[1].dataset.card){
@@ -95,6 +94,7 @@ function initGame(){
   });
 
 }
+
 
 initGame();
 
