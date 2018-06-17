@@ -11,6 +11,10 @@ var cards = ['fa-diamond', 'fa-diamond',
             'fa-bicycle', 'fa-bicycle',
             'fa-bomb', 'fa-bomb'];
 
+var matchedCardsPairs = 0;
+var moveCounter = 0;
+
+
 function generateCard(card){
   return `<li class="card" data-card = "fa ${card}"><i class="fa ${card}"></i></li>`;
 }
@@ -38,6 +42,8 @@ function shuffle(array) {
 }
 
 function initGame(){
+  matchedCardsPairs = 0;
+  moveCounter = 0;
   var deck = document.querySelector('.deck');
   var cardHTML = shuffle(cards).map(function(card){
     return generateCard(card);
@@ -57,7 +63,6 @@ restart.addEventListener('click', function(e){
 
 var allCards = document.querySelectorAll('.card');
 var openCards = [];
-var matchedCardsPairs = 0;
 
 allCards.forEach(function(card){
   card.addEventListener('click', function(e){
@@ -65,6 +70,8 @@ allCards.forEach(function(card){
       openCards.push(card);
       card.classList.add('open','show');
       if (openCards.length == 2){
+        moveCounter += 1;
+        console.log('Moves number is: ' + moveCounter);
 
         //if cards match:
         if (openCards[0].dataset.card == openCards[1].dataset.card){
