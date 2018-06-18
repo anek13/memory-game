@@ -45,6 +45,11 @@ function shuffle(array) {
 function initGame(){
   matchedCardsPairs = 0;
   moveCounter = 0;
+
+  document.getElementById('first-star').className = "fa fa-star";
+  document.getElementById('second-star').className = "fa fa-star";
+  document.getElementById('third-star').className = "fa fa-star";
+
   var deck = document.querySelector('.deck');
   var cardHTML = shuffle(cards).map(function(card){
     return generateCard(card);
@@ -66,6 +71,15 @@ function initGame(){
         if (openCards.length == 2){
           moveCounter += 1;
           document.getElementById('moveCount').innerHTML = moveCounter;
+          if (moveCounter >= 3){
+            document.getElementById('third-star').className = "fa fa-star-o";
+          }
+          if (moveCounter >= 5){
+            document.getElementById('second-star').className = "fa fa-star-o";
+          }
+          if (moveCounter >= 7){
+            document.getElementById('first-star').className = "fa fa-star-o";
+          }
 
           //if cards match:
           if (openCards[0].dataset.card == openCards[1].dataset.card){
