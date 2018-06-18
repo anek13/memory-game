@@ -122,8 +122,7 @@ var seconds;
 
 function myTimer() {
     var d = new Date();
-    timeDifference = (d - timeStart)/1000
-    console.log(timeDifference)
+    timeDifference = (d - timeStart)/1000;
     minutes = Math.floor(timeDifference/60);
     seconds = timeDifference - 60 * minutes;
     document.getElementById("minutes").innerHTML = Math.floor(minutes);
