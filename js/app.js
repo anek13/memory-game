@@ -13,6 +13,8 @@ var cards = ['fa-diamond', 'fa-diamond',
 
 var matchedCardsPairs = 0;
 var moveCounter = 0;
+var clock;
+var timeStart;
 
 function generateCard(card){
   return `<li class="card" data-card = "fa ${card}"><i class="fa ${card}"></i></li>`;
@@ -55,6 +57,10 @@ function initGame(){
   allCards.forEach(function(card){
     card.addEventListener('click', function(e){
       if (!card.classList.contains('open') && !card.classList.contains('show') && !card.classList.contains('match') && openCards.length < 2){
+        if (!clock){
+          clock = setInterval(myTimer, 1000);
+          timeStart = new Date();
+        }
         openCards.push(card);
         card.classList.add('open','show');
         if (openCards.length == 2){
@@ -70,6 +76,8 @@ function initGame(){
             matchedCardsPairs += 1;
             if (matchedCardsPairs == 8){
               console.log('You won!');
+              clearTimeout(clock);
+              clock = false;
               var para = document.createElement("P");
               var t = document.createTextNode('Congratulations you won in ' + moveCounter + ' moves!');
               para.appendChild(t);
@@ -95,6 +103,18 @@ function initGame(){
 
 }
 
+var mintues;
+var seconds;
+
+function myTimer() {
+    var d = new Date();
+    timeDifference = (d - timeStart)/1000
+    console.log(timeDifference)
+    minutes = Math.floor(timeDifference/60);
+    seconds = timeDifference - 60 * minutes;
+    document.getElementById("minutes").innerHTML = Math.floor(minutes);
+    document.getElementById("seconds").innerHTML = Math.floor(seconds);
+}
 
 initGame();
 
@@ -102,6 +122,10 @@ initGame();
 var restart = document.querySelector('.restart');
 restart.addEventListener('click', function(e){
   console.log('restart button has been clicked');
+  clearTimeout(clock);
+  clock = false;
+  document.getElementById("minutes").innerHTML = 0;
+  document.getElementById("seconds").innerHTML = 0;
   initGame();
 });
 
