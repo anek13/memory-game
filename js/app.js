@@ -15,6 +15,7 @@ var matchedCardsPairs = 0;
 var moveCounter = 0;
 var clock;
 var timeStart;
+var modalText
 
 function generateCard(card){
   return `<li class="card" data-card = "fa ${card}"><i class="fa ${card}"></i></li>`;
@@ -92,11 +93,14 @@ function initGame(){
               console.log('You won!');
               clearTimeout(clock);
               clock = false;
-              var para = document.createElement("P");
-              var t = document.createTextNode('Congratulations you won in ' + moveCounter + ' moves!');
-              para.appendChild(t);
-              document.getElementsByClassName("modal-content")[0].appendChild(para);
 
+              modalText = document.createElement("DIV");
+              modalText.innerHTML = (`<p>Congratulations you won in ${moveCounter} moves!</p>
+                                <p>Your time is ${Math.floor(minutes)} minutes and ${Math.floor(seconds)} seconds!</p>
+                                <p>Your rating is <i class="${document.getElementById('first-star').className}"></i>
+                                <i class="${document.getElementById('second-star').className}"></i>
+                                <i class="${document.getElementById('third-star').className}"></i></p>`);
+              document.getElementsByClassName("modal-content")[0].appendChild(modalText);
               modal.style.display = "block";
             }
           }
@@ -119,6 +123,7 @@ function initGame(){
 
 var mintues;
 var seconds;
+
 
 function myTimer() {
     var d = new Date();
@@ -166,11 +171,13 @@ restart.addEventListener('click', function(e){
  // When the user clicks on <span> (x), close the modal
  span.onclick = function() {
      modal.style.display = "none";
+     document.getElementsByClassName("modal-content")[0].removeChild(modalText);
  }
 
  // When the user clicks anywhere outside of the modal, close it
  window.onclick = function(event) {
      if (event.target == modal) {
          modal.style.display = "none";
+         document.getElementsByClassName("modal-content")[0].removeChild(modalText);
      }
  }
