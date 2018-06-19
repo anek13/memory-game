@@ -13,6 +13,7 @@ var cards = ['fa-diamond', 'fa-diamond',
 
 var matchedCardsPairs = 0;
 var moveCounter = 0;
+var stars;
 var clock;
 var timeStart;
 var modalText
@@ -46,6 +47,7 @@ function shuffle(array) {
 function initGame(){
   matchedCardsPairs = 0;
   moveCounter = 0;
+  stars = 3;
 
   document.getElementById('first-star').className = "fa fa-star";
   document.getElementById('second-star').className = "fa fa-star";
@@ -73,12 +75,15 @@ function initGame(){
           moveCounter += 1;
           document.getElementById('moveCount').innerHTML = moveCounter;
           if (moveCounter >= 3){
+            stars -= 1;
             document.getElementById('third-star').className = "fa fa-star-o";
           }
           if (moveCounter >= 5){
+            stars -= 1;
             document.getElementById('second-star').className = "fa fa-star-o";
           }
           if (moveCounter >= 7){
+            stars -= 1;
             document.getElementById('first-star').className = "fa fa-star-o";
           }
 
@@ -94,14 +99,20 @@ function initGame(){
               clearTimeout(clock);
               clock = false;
 
-              modalText = document.createElement("DIV");
-              modalText.innerHTML = (`<p>Congratulations you won in ${moveCounter} moves!</p>
-                                <p>Your time is ${Math.floor(minutes)} minutes and ${Math.floor(seconds)} seconds!</p>
-                                <p>Your rating is <i class="${document.getElementById('first-star').className}"></i>
-                                <i class="${document.getElementById('second-star').className}"></i>
-                                <i class="${document.getElementById('third-star').className}"></i></p>`);
-              document.getElementsByClassName("modal-content")[0].appendChild(modalText);
+              modalText = document.getElementsByClassName('modal-text')[0];
+              modalText.innerHTML = `<p id="congrats">Congratulations you won!</p>
+                                    <p>You won with ${moveCounter} moves and ${stars} stars.</p>
+                                    <p>Your time is ${Math.floor(minutes)} minutes and ${Math.floor(seconds)} seconds!</p>
+                                    <button type="button" id='play-again'>Play again!</button>`;
               modal.style.display = "block";
+
+              var newGame = document.getElementById('play-again');
+              newGame.addEventListener('click', function(e){
+                console.log('new game starts');
+                modal.style.display = "none";
+                restartGame();
+              });
+
             }
           }
 
@@ -137,15 +148,23 @@ function myTimer() {
 initGame();
 
 //Restarting Game
+
 var restart = document.querySelector('.restart');
 restart.addEventListener('click', function(e){
   console.log('restart button has been clicked');
+  restartGame();
+});
+
+
+
+function restartGame(){
   clearTimeout(clock);
   clock = false;
   document.getElementById("minutes").innerHTML = 0;
   document.getElementById("seconds").innerHTML = 0;
+  document.getElementById("moveCount").innerHTML = 0;
   initGame();
-});
+}
 
 /*
  * set up the event listener for a card. If a card is clicked:
@@ -171,13 +190,11 @@ restart.addEventListener('click', function(e){
  // When the user clicks on <span> (x), close the modal
  span.onclick = function() {
      modal.style.display = "none";
-     document.getElementsByClassName("modal-content")[0].removeChild(modalText);
  }
 
  // When the user clicks anywhere outside of the modal, close it
  window.onclick = function(event) {
      if (event.target == modal) {
          modal.style.display = "none";
-         document.getElementsByClassName("modal-content")[0].removeChild(modalText);
      }
  }
