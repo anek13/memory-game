@@ -2,14 +2,14 @@
  * Create a list that holds all of your cards
  */
 
-var cards = ['fa-diamond', 'fa-diamond',
-            'fa-paper-plane-o', 'fa-paper-plane-o',
-            'fa-bolt', 'fa-bolt',
-            'fa-cube', 'fa-cube',
-            'fa-anchor', 'fa-anchor',
-            'fa-leaf', 'fa-leaf',
-            'fa-bicycle', 'fa-bicycle',
-            'fa-bomb', 'fa-bomb'];
+var cards = ['fa-car', 'fa-car',
+            'fa-book', 'fa-book',
+            'fa-key', 'fa-key',
+            'fa-flask', 'fa-flask',
+            'fa-coffee', 'fa-coffee',
+            'fa-rocket', 'fa-rocket',
+            'fa-umbrella', 'fa-umbrella',
+            'fa-heart', 'fa-heart'];
 
 var matchedCardsPairs = 0;
 var moveCounter = 0;
