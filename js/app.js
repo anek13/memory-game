@@ -85,10 +85,10 @@ function setVariables(){
 //Generate modal modalText
 function generateModalContent(){
   modalText = document.getElementsByClassName('modal-text')[0];
-  modalText.innerHTML = `<div id="modalText"><p id="congrats">Congratulations you won!</p>
+  modalText.innerHTML = `<p id="congrats">Congratulations you won!</p>
                         <p>You won with ${moveCounter} moves and ${stars} stars.</p>
                         <p>Your time is ${minutes} minutes and ${seconds} seconds!</p></div>
-                        <div class="button"><button type="button" id='play-again'>Play again!</button></div>`;
+                        <div class="button"><button type="button" id='play-again'>Play again!</button>`;
   modal.style.display = "block";
 
   var newGame = document.getElementById('play-again');
