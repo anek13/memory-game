@@ -109,7 +109,7 @@ function initGame(){
     card.addEventListener('click', function(e){
       if (!card.classList.contains('open') && !card.classList.contains('show') && !card.classList.contains('match') && openCards.length < 2){
         if (!clock){
-          clock = setInterval(myTimer, 1000);
+          clock = setInterval(myTimer, 100);
           timeStart = new Date();
         }
         openCards.push(card);
@@ -127,7 +127,7 @@ function initGame(){
           }
           if (moveCounter >= 7){
             stars = 0;
-            document.getElementsByTagName("LI")[2].className = "fa fa-star-o";
+            document.getElementsByTagName("LI")[0].className = "fa fa-star-o";
           }
 
           //if cards match:
@@ -137,7 +137,7 @@ function initGame(){
             openCards[1].classList.add('match');
             openCards = [];
             matchedCardsPairs += 1;
-            if (matchedCardsPairs == 2){
+            if (matchedCardsPairs == 8){
               console.log('You won!');
               clearTimeout(clock);
               generateModalContent();
@@ -165,10 +165,24 @@ function initGame(){
 function myTimer() {
     var d = new Date();
     timeDifference = (d - timeStart)/1000;
+    console.log(timeDifference);
     minutes = Math.floor(timeDifference/60);
-    seconds = timeDifference - 60 * minutes;
-    document.getElementById("minutes").innerHTML = Math.floor(minutes);
-    document.getElementById("seconds").innerHTML = Math.floor(seconds);
+    seconds = Math.floor(timeDifference - 60 * minutes);
+
+    //print the times
+    if (minutes < 10){
+      document.getElementById("minutes").innerHTML = '0' + minutes;
+    }
+    else {
+      document.getElementById("minutes").innerHTML = minutes;
+    }
+
+    if (seconds < 10){
+      document.getElementById("seconds").innerHTML = '0' + seconds;
+    }
+    else {
+      document.getElementById("seconds").innerHTML = seconds;
+    }
 }
 
 initGame();
