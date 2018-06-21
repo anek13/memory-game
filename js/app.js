@@ -11,12 +11,12 @@
 
 //Create a list that holds all of the cards
 let cards = ['fa-car', 'fa-car',
-            'fa-book', 'fa-book',
-            'fa-key', 'fa-key',
+            'fa-bell', 'fa-bell',
+            'fa-bug', 'fa-bug',
             'fa-flask', 'fa-flask',
-            'fa-coffee', 'fa-coffee',
-            'fa-rocket', 'fa-rocket',
-            'fa-umbrella', 'fa-umbrella',
+            'fa-diamond', 'fa-diamond',
+            'fa-glass', 'fa-glass',
+            'fa-paw', 'fa-paw',
             'fa-heart', 'fa-heart'];
 
 let matchedCardsPairs;
@@ -74,7 +74,7 @@ function setVariables(){
 
   document.getElementById("minutes").innerHTML = '00';
   document.getElementById("seconds").innerHTML = '00';
-  document.getElementById("moveCount").innerHTML = 0;
+  document.getElementById("moveCount").innerHTML = '0';
 
   starDivs = document.querySelectorAll('li');
   for (i = 0; i < starDivs.length; ++i) {
@@ -147,9 +147,11 @@ function initGame(){
 
           //if card do not match:
           else {
+            openCards[0].classList.add('nomatch');
+            openCards[1].classList.add('nomatch');
             setTimeout(function(){
               openCards.forEach(function(card){
-                card.classList.remove('open','show');
+                card.classList.remove('nomatch','open','show');
               });
               openCards = [];
             }, 1000);
@@ -165,7 +167,7 @@ function initGame(){
 function myTimer() {
     var d = new Date();
     timeDifference = (d - timeStart)/1000;
-    console.log(timeDifference);
+    // console.log(timeDifference);
     minutes = Math.floor(timeDifference/60);
     seconds = Math.floor(timeDifference - 60 * minutes);
 
