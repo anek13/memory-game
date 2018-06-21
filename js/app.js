@@ -1,8 +1,16 @@
 /*
- * Create a list that holds all of your cards
- */
+* set up the event listener for a card. If a card is clicked:
+*  - display the card's symbol (put this functionality in another function that you call from this one)
+*  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
+*  - if the list already has another card, check to see if the two cards match
+*    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
+*    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
+*    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
+*    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
+*/
 
-var cards = ['fa-car', 'fa-car',
+//Create a list that holds all of the cards
+let cards = ['fa-car', 'fa-car',
             'fa-book', 'fa-book',
             'fa-key', 'fa-key',
             'fa-flask', 'fa-flask',
@@ -11,23 +19,24 @@ var cards = ['fa-car', 'fa-car',
             'fa-umbrella', 'fa-umbrella',
             'fa-heart', 'fa-heart'];
 
-var matchedCardsPairs = 0;
-var moveCounter = 0;
-var stars;
-var clock;
-var timeStart;
-var modalText
+let matchedCardsPairs;
+let moveCounter;
+let stars;
+let clock;
+let timeStart;
+let modalText;
+let mintues;
+let seconds;
+let openCards;
+let deck;
+let cardHTML;
+let starDivs;
 
+
+//Generate cards
 function generateCard(card){
   return `<li class="card" data-card = "fa ${card}"><i class="fa ${card}"></i></li>`;
 }
-
-/*
- * Display the cards on the page
- *   - shuffle the list of cards using the provided "shuffle" method below
- *   - loop through each card and create its HTML
- *   - add each card's HTML to the page
- */
 
 // Shuffle function from http://stackoverflow.com/a/2450976
 function shuffle(array) {
@@ -44,24 +53,58 @@ function shuffle(array) {
     return array;
 }
 
-function initGame(){
+
+//display the card's symbol
+function addCardsToDOM(){
+  deck = document.querySelector('.deck');
+  cardHTML = shuffle(cards).map(function(card){
+    return generateCard(card);
+  });
+  deck.innerHTML = cardHTML.join(' ');
+}
+
+// Set all variables for a new game
+function setVariables(){
+
   matchedCardsPairs = 0;
   moveCounter = 0;
   stars = 3;
+  clock = false;
+  openCards = [];
 
-  document.getElementById('first-star').className = "fa fa-star";
-  document.getElementById('second-star').className = "fa fa-star";
-  document.getElementById('third-star').className = "fa fa-star";
+  document.getElementById("minutes").innerHTML = '00';
+  document.getElementById("seconds").innerHTML = '00';
+  document.getElementById("moveCount").innerHTML = 0;
 
-  var deck = document.querySelector('.deck');
-  var cardHTML = shuffle(cards).map(function(card){
-    return generateCard(card);
+  starDivs = document.querySelectorAll('li');
+  for (i = 0; i < starDivs.length; ++i) {
+    starDivs[i].className = "fa fa-star";
+  }
+}
+
+//Generate modal modalText
+function generateModalContent(){
+  modalText = document.getElementsByClassName('modal-text')[0];
+  modalText.innerHTML = `<p id="congrats">Congratulations you won!</p>
+                        <p>You won with ${moveCounter} moves and ${stars} stars.</p>
+                        <p>Your time is ${Math.floor(minutes)} minutes and ${Math.floor(seconds)} seconds!</p>
+                        <button type="button" id='play-again'>Play again!</button>`;
+  modal.style.display = "block";
+
+  var newGame = document.getElementById('play-again');
+  newGame.addEventListener('click', function(e){
+    modal.style.display = "none";
+    initGame();
   });
-  console.log(cardHTML);
-  deck.innerHTML = cardHTML.join(' ');
-  var allCards = document.querySelectorAll('.card');
-  var openCards = [];
+}
 
+
+function initGame(){
+
+  setVariables();
+  addCardsToDOM();
+
+  let allCards = document.querySelectorAll('.card');
   allCards.forEach(function(card){
     card.addEventListener('click', function(e){
       if (!card.classList.contains('open') && !card.classList.contains('show') && !card.classList.contains('match') && openCards.length < 2){
@@ -75,16 +118,16 @@ function initGame(){
           moveCounter += 1;
           document.getElementById('moveCount').innerHTML = moveCounter;
           if (moveCounter >= 3){
-            stars -= 1;
-            document.getElementById('third-star').className = "fa fa-star-o";
+            stars = 2;
+            document.getElementsByTagName("LI")[2].className = "fa fa-star-o";
           }
           if (moveCounter >= 5){
-            stars -= 1;
-            document.getElementById('second-star').className = "fa fa-star-o";
+            stars = 1;
+            document.getElementsByTagName("LI")[1].className = "fa fa-star-o";
           }
           if (moveCounter >= 7){
-            stars -= 1;
-            document.getElementById('first-star').className = "fa fa-star-o";
+            stars = 0;
+            document.getElementsByTagName("LI")[2].className = "fa fa-star-o";
           }
 
           //if cards match:
@@ -94,24 +137,10 @@ function initGame(){
             openCards[1].classList.add('match');
             openCards = [];
             matchedCardsPairs += 1;
-            if (matchedCardsPairs == 8){
+            if (matchedCardsPairs == 2){
               console.log('You won!');
               clearTimeout(clock);
-              clock = false;
-
-              modalText = document.getElementsByClassName('modal-text')[0];
-              modalText.innerHTML = `<p id="congrats">Congratulations you won!</p>
-                                    <p>You won with ${moveCounter} moves and ${stars} stars.</p>
-                                    <p>Your time is ${Math.floor(minutes)} minutes and ${Math.floor(seconds)} seconds!</p>
-                                    <button type="button" id='play-again'>Play again!</button>`;
-              modal.style.display = "block";
-
-              var newGame = document.getElementById('play-again');
-              newGame.addEventListener('click', function(e){
-                console.log('new game starts');
-                modal.style.display = "none";
-                restartGame();
-              });
+              generateModalContent();
 
             }
           }
@@ -132,10 +161,7 @@ function initGame(){
 
 }
 
-var mintues;
-var seconds;
-
-
+//Time display
 function myTimer() {
     var d = new Date();
     timeDifference = (d - timeStart)/1000;
@@ -147,36 +173,17 @@ function myTimer() {
 
 initGame();
 
-//Restarting Game
-
+//Event handler for restart button
 var restart = document.querySelector('.restart');
 restart.addEventListener('click', function(e){
   console.log('restart button has been clicked');
-  restartGame();
+  clearTimeout(clock);
+  initGame();
 });
 
-
-
-function restartGame(){
-  clearTimeout(clock);
-  clock = false;
-  document.getElementById("minutes").innerHTML = 0;
-  document.getElementById("seconds").innerHTML = 0;
-  document.getElementById("moveCount").innerHTML = 0;
-  initGame();
-}
-
 /*
- * set up the event listener for a card. If a card is clicked:
- *  - display the card's symbol (put this functionality in another function that you call from this one)
- *  - add the card to a *list* of "open" cards (put this functionality in another function that you call from this one)
- *  - if the list already has another card, check to see if the two cards match
- *    + if the cards do match, lock the cards in the open position (put this functionality in another function that you call from this one)
- *    + if the cards do not match, remove the cards from the list and hide the card's symbol (put this functionality in another function that you call from this one)
- *    + increment the move counter and display it on the page (put this functionality in another function that you call from this one)
- *    + if all cards have matched, display a message with the final score (put this functionality in another function that you call from this one)
+ * Modal operations
  */
-
 
  // Get the modal
  var modal = document.getElementById('myModal');
