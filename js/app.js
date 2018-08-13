@@ -98,6 +98,60 @@ function generateModalContent(){
   });
 }
 
+function cardClickHandler(e) {
+  let card = e.target;
+  if (!card.classList.contains('open') && !card.classList.contains('show') && !card.classList.contains('match') && openCards.length < 2){
+    if (!clock){
+      clock = setInterval(myTimer, 100);
+      timeStart = new Date();
+    }
+    openCards.push(card);
+    card.classList.add('open','show');
+    if (openCards.length == 2){
+      moveCounter += 1;
+      document.getElementById('moveCount').innerHTML = moveCounter;
+      if (moveCounter >= 15){
+        stars = 2;
+        document.getElementsByTagName("LI")[2].className = "fa fa-star-o";
+      }
+      if (moveCounter >= 23){
+        stars = 1;
+        document.getElementsByTagName("LI")[1].className = "fa fa-star-o";
+      }
+      if (moveCounter >= 30){
+        stars = 0;
+        document.getElementsByTagName("LI")[0].className = "fa fa-star-o";
+      }
+
+      //if cards match:
+      if (openCards[0].dataset.card == openCards[1].dataset.card){
+        console.log('cards match');
+        openCards[0].classList.add('match');
+        openCards[1].classList.add('match');
+        openCards = [];
+        matchedCardsPairs += 1;
+        if (matchedCardsPairs == 8){
+          console.log('You won!');
+          clearTimeout(clock);
+          generateModalContent();
+
+        }
+      }
+
+      //if card do not match:
+      else {
+        openCards[0].classList.add('nomatch');
+        openCards[1].classList.add('nomatch');
+        setTimeout(function(){
+          openCards.forEach(function(card){
+            card.classList.remove('nomatch','open','show');
+          });
+          openCards = [];
+        }, 1000);
+      }
+    }
+  }
+}
 
 function initGame(){
 
@@ -106,59 +160,7 @@ function initGame(){
 
   let allCards = document.querySelectorAll('.card');
   allCards.forEach(function(card){
-    card.addEventListener('click', function(e){
-      if (!card.classList.contains('open') && !card.classList.contains('show') && !card.classList.contains('match') && openCards.length < 2){
-        if (!clock){
-          clock = setInterval(myTimer, 100);
-          timeStart = new Date();
-        }
-        openCards.push(card);
-        card.classList.add('open','show');
-        if (openCards.length == 2){
-          moveCounter += 1;
-          document.getElementById('moveCount').innerHTML = moveCounter;
-          if (moveCounter >= 15){
-            stars = 2;
-            document.getElementsByTagName("LI")[2].className = "fa fa-star-o";
-          }
-          if (moveCounter >= 23){
-            stars = 1;
-            document.getElementsByTagName("LI")[1].className = "fa fa-star-o";
-          }
-          if (moveCounter >= 30){
-            stars = 0;
-            document.getElementsByTagName("LI")[0].className = "fa fa-star-o";
-          }
-
-          //if cards match:
-          if (openCards[0].dataset.card == openCards[1].dataset.card){
-            console.log('cards match');
-            openCards[0].classList.add('match');
-            openCards[1].classList.add('match');
-            openCards = [];
-            matchedCardsPairs += 1;
-            if (matchedCardsPairs == 8){
-              console.log('You won!');
-              clearTimeout(clock);
-              generateModalContent();
-
-            }
-          }
-
-          //if card do not match:
-          else {
-            openCards[0].classList.add('nomatch');
-            openCards[1].classList.add('nomatch');
-            setTimeout(function(){
-              openCards.forEach(function(card){
-                card.classList.remove('nomatch','open','show');
-              });
-              openCards = [];
-            }, 1000);
-          }
-        }
-      }
-    });
+    card.addEventListener('click', cardClickHandler);
   });
 
 }
@@ -192,7 +194,6 @@ initGame();
 //Event handler for restart button
 var restart = document.querySelector('.restart');
 restart.addEventListener('click', function(e){
-  console.log('restart button has been clicked');
   clearTimeout(clock);
   initGame();
 });
