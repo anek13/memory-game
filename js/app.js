@@ -63,7 +63,7 @@ function addCardsToDOM(){
   deck.innerHTML = cardHTML.join(' ');
 }
 
-// Set all variables for a new game
+// Set initial variables for a new game
 function setVariables(){
 
   matchedCardsPairs = 0;
@@ -117,15 +117,15 @@ function initGame(){
         if (openCards.length == 2){
           moveCounter += 1;
           document.getElementById('moveCount').innerHTML = moveCounter;
-          if (moveCounter >= 3){
+          if (moveCounter >= 15){
             stars = 2;
             document.getElementsByTagName("LI")[2].className = "fa fa-star-o";
           }
-          if (moveCounter >= 5){
+          if (moveCounter >= 23){
             stars = 1;
             document.getElementsByTagName("LI")[1].className = "fa fa-star-o";
           }
-          if (moveCounter >= 7){
+          if (moveCounter >= 30){
             stars = 0;
             document.getElementsByTagName("LI")[0].className = "fa fa-star-o";
           }
