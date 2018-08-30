@@ -1,20 +1,27 @@
 # Memory Game Project
 
+A Web-based Memory Game otherwise known as Match Match, Match Up, Memory, Pelmanism, Shinkei-suijaku, Pexeso or simply Pairs. Aim of the game is to uncover all pairs of matching cards.
+
 ## Table of Contents
 
+* [Install](#instructions)
 * [Instructions](#instructions)
 * [Contributing](#contributing)
 
+## Install
+
+To play the game go to https://anek13.github.io/memory-game/.
+
 ## Instructions
 
-The starter project has some HTML and CSS styling to display a static version of the Memory Game project. You'll need to convert this project from a static project to an interactive one. This will require modifying the HTML and CSS files, but primarily the JavaScript file.
+Flip over cards by clicking on them. Game ends when all the cards are uncovered.
 
-To get started, open `js/app.js` and start building out the app's functionality
-
-For specific, detailed instructions, look at the project instructions in the [Udacity Classroom](https://classroom.udacity.com/me).
+There is a star scoring system working in the following way:
+- 3 stars when you finish with less than 15 moves
+- 2 stars when you finish with less than 23 moves
+- 1 star when you finish with less than 30 moves
+- no stars when you finish with more than 30 moves
 
 ## Contributing
 
-This repository is the starter code for _all_ Udacity students. Therefore, we most likely will not accept pull requests.
-
-For details, check out [CONTRIBUTING.md](CONTRIBUTING.md).
+This repository is a project Udacity naodegree programme. Therefore, most likely pull requests will not be accepted.
