@@ -82,7 +82,6 @@ function setVariables(){
 //Generate modal modal content
 function generateModalContent(){
   modalText = document.getElementsByClassName('modal-text')[0];
-  generateModalText(stars, minutes);
   modalText.innerHTML = `<p id="congrats">Congratulations you won!</p>
                         <p>You won with ${moveCounter} moves and ${stars} stars.</p>
                         <p>Your time is ${minutes} minutes and ${seconds} seconds!</p></div>
@@ -97,24 +96,21 @@ function generateModalContent(){
 }
 
 function winningGame() {
-  console.log('You won!');
   clearTimeout(clock);
   generateModalContent();
 }
 
 function cardsMatch() {
-  console.log('cards match');
   openCards[0].classList.add('match');
   openCards[1].classList.add('match');
   openCards = [];
   matchedCardsPairs += 1;
-  if (matchedCardsPairs == 8){
+  if (matchedCardsPairs === 8){
     winningGame();
   }
 }
 
 function cardsDontMatch() {
-  console.log('cards don\'t match');
   openCards[0].classList.add('nomatch');
   openCards[1].classList.add('nomatch');
   setTimeout(function(){
@@ -124,13 +120,6 @@ function cardsDontMatch() {
     openCards = [];
   }, 1000);
 }
-
-
-// function openingCards(card) {
-//   if (!card.classList.contains('open') && !card.classList.contains('show') && !card.classList.contains('match') && openCards.length < 2){
-//     return true;
-//   }
-// }
 
 //starts the time counter
 function startClock() {
@@ -166,17 +155,21 @@ function displayCard(card) {
   card.classList.add('open','show');
 }
 
+function canOpenCard(card) {
+  return (!card.classList.contains('open') && !card.classList.contains('show') && !card.classList.contains('match') && openCards.length < 2);
+}
+
 function cardClickHandler(e) {
   let card = e.target;
   //opens not opened cards untill there is two and only two o them
-  if (!card.classList.contains('open') && !card.classList.contains('show') && !card.classList.contains('match') && openCards.length < 2){
+  if (canOpenCard(card)){
 
     startClock();
     openCard(card)
     displayCard(card);
 
     // checking if cards match
-    if (openCards.length == 2){
+    if (openCards.length === 2){
       incrementMoveCounter();
       if (openCards[0].dataset.card == openCards[1].dataset.card){
         cardsMatch();
