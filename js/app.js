@@ -10,27 +10,25 @@
 */
 
 //Create a list that holds all of the cards
-let cards = ['fa-car', 'fa-car',
-            'fa-bell', 'fa-bell',
-            'fa-bug', 'fa-bug',
-            'fa-flask', 'fa-flask',
-            'fa-diamond', 'fa-diamond',
-            'fa-glass', 'fa-glass',
-            'fa-paw', 'fa-paw',
-            'fa-heart', 'fa-heart'];
+let cards = ['fa-car', 'fa-bell',
+            'fa-bug', 'fa-flask',
+            'fa-diamond', 'fa-glass',
+            'fa-paw', 'fa-heart'];
 
-let matchedCardsPairs;
-let moveCounter;
-let stars;
-let clock;
-let timeStart;
-let modalText;
-let mintues;
-let seconds;
-let openCards;
-let deck;
-let cardHTML;
-let starDivs;
+cards = [...cards, ...cards];
+
+let matchedCardsPairs,
+    moveCounter,
+    stars,
+    clock,
+    timeStart,
+    modalText,
+    mintues,
+    seconds,
+    openCards,
+    deck,
+    cardHTML,
+    starDivs;
 
 
 //Generate cards
@@ -52,7 +50,6 @@ function shuffle(array) {
 
     return array;
 }
-
 
 //display the card's symbol
 function addCardsToDOM(){
@@ -82,9 +79,10 @@ function setVariables(){
   }
 }
 
-//Generate modal modalText
+//Generate modal modal content
 function generateModalContent(){
   modalText = document.getElementsByClassName('modal-text')[0];
+  generateModalText(stars, minutes);
   modalText.innerHTML = `<p id="congrats">Congratulations you won!</p>
                         <p>You won with ${moveCounter} moves and ${stars} stars.</p>
                         <p>Your time is ${minutes} minutes and ${seconds} seconds!</p></div>
@@ -98,56 +96,92 @@ function generateModalContent(){
   });
 }
 
+function winningGame() {
+  console.log('You won!');
+  clearTimeout(clock);
+  generateModalContent();
+}
+
+function cardsMatch() {
+  console.log('cards match');
+  openCards[0].classList.add('match');
+  openCards[1].classList.add('match');
+  openCards = [];
+  matchedCardsPairs += 1;
+  if (matchedCardsPairs == 8){
+    winningGame();
+  }
+}
+
+function cardsDontMatch() {
+  console.log('cards don\'t match');
+  openCards[0].classList.add('nomatch');
+  openCards[1].classList.add('nomatch');
+  setTimeout(function(){
+    openCards.forEach(function(card){
+      card.classList.remove('nomatch','open','show');
+    });
+    openCards = [];
+  }, 1000);
+}
+
+
+// function openingCards(card) {
+//   if (!card.classList.contains('open') && !card.classList.contains('show') && !card.classList.contains('match') && openCards.length < 2){
+//     return true;
+//   }
+// }
+
+//starts the time counter
+function startClock() {
+  if (!clock){
+    clock = setInterval(myTimer, 100);
+    timeStart = new Date();
+  }
+}
+
+//counts moves and removes the stars from the score
+function incrementMoveCounter () {
+  moveCounter += 1;
+  document.getElementById('moveCount').innerHTML = moveCounter;
+  if (moveCounter >= 15){
+    stars = 2;
+    document.getElementsByTagName("LI")[2].className = "fa fa-star-o";
+  }
+  if (moveCounter >= 23){
+    stars = 1;
+    document.getElementsByTagName("LI")[1].className = "fa fa-star-o";
+  }
+  if (moveCounter >= 30){
+    stars = 0;
+    document.getElementsByTagName("LI")[0].className = "fa fa-star-o";
+  }
+}
+
+function openCard(card) {
+  openCards.push(card);
+}
+
+function displayCard(card) {
+  card.classList.add('open','show');
+}
+
 function cardClickHandler(e) {
   let card = e.target;
+  //opens not opened cards untill there is two and only two o them
   if (!card.classList.contains('open') && !card.classList.contains('show') && !card.classList.contains('match') && openCards.length < 2){
-    if (!clock){
-      clock = setInterval(myTimer, 100);
-      timeStart = new Date();
-    }
-    openCards.push(card);
-    card.classList.add('open','show');
+
+    startClock();
+    openCard(card)
+    displayCard(card);
+
+    // checking if cards match
     if (openCards.length == 2){
-      moveCounter += 1;
-      document.getElementById('moveCount').innerHTML = moveCounter;
-      if (moveCounter >= 15){
-        stars = 2;
-        document.getElementsByTagName("LI")[2].className = "fa fa-star-o";
-      }
-      if (moveCounter >= 23){
-        stars = 1;
-        document.getElementsByTagName("LI")[1].className = "fa fa-star-o";
-      }
-      if (moveCounter >= 30){
-        stars = 0;
-        document.getElementsByTagName("LI")[0].className = "fa fa-star-o";
-      }
-
-      //if cards match:
+      incrementMoveCounter();
       if (openCards[0].dataset.card == openCards[1].dataset.card){
-        console.log('cards match');
-        openCards[0].classList.add('match');
-        openCards[1].classList.add('match');
-        openCards = [];
-        matchedCardsPairs += 1;
-        if (matchedCardsPairs == 8){
-          console.log('You won!');
-          clearTimeout(clock);
-          generateModalContent();
-
-        }
-      }
-
-      //if card do not match:
-      else {
-        openCards[0].classList.add('nomatch');
-        openCards[1].classList.add('nomatch');
-        setTimeout(function(){
-          openCards.forEach(function(card){
-            card.classList.remove('nomatch','open','show');
-          });
-          openCards = [];
-        }, 1000);
+        cardsMatch();
+      } else {
+        cardsDontMatch();
       }
     }
   }
@@ -165,30 +199,27 @@ function initGame(){
 
 }
 
+function formatTime(n) {
+  if (n < 10){
+    return '0' + n;
+  }
+  else {
+    return n;
+  }
+}
+
 //Time display
 function myTimer() {
     var d = new Date();
     timeDifference = (d - timeStart)/1000;
-    // console.log(timeDifference);
     minutes = Math.floor(timeDifference/60);
     seconds = Math.floor(timeDifference - 60 * minutes);
-
-    //print the times
-    if (minutes < 10){
-      document.getElementById("minutes").innerHTML = '0' + minutes;
-    }
-    else {
-      document.getElementById("minutes").innerHTML = minutes;
-    }
-
-    if (seconds < 10){
-      document.getElementById("seconds").innerHTML = '0' + seconds;
-    }
-    else {
-      document.getElementById("seconds").innerHTML = seconds;
-    }
+    document.getElementById("minutes").innerHTML = formatTime(minutes);
+    document.getElementById("seconds").innerHTML = formatTime(seconds);
 }
 
+
+//start the game
 initGame();
 
 //Event handler for restart button
@@ -198,24 +229,9 @@ restart.addEventListener('click', function(e){
   initGame();
 });
 
-/*
- * Modal operations
- */
-
+ // Modal operations
  // Get the modal
  var modal = document.getElementById('myModal');
-
- // Get the button that opens the modal
- var btn = document.getElementById("myBtn");
-
- // Get the <span> element that closes the modal
- var span = document.getElementsByClassName("close")[0];
-
- // When the user clicks on <span> (x), close the modal
- span.onclick = function() {
-     modal.style.display = "none";
- }
-
  // When the user clicks anywhere outside of the modal, close it
  window.onclick = function(event) {
      if (event.target == modal) {
