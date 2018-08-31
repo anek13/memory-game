@@ -10,7 +10,13 @@ A Web-based Memory Game otherwise known as Match Match, Match Up, Memory, Pelman
 
 ## Install
 
-To play the game go to https://anek13.github.io/memory-game/.
+To play the game online go to https://anek13.github.io/memory-game/.
+
+To play the game locally, clone this repository 
+```
+git clone https://github.com/anek13/memory-game.git
+```
+and open the index.html file in your web browser
 
 ## Instructions
 
