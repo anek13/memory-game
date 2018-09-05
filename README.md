@@ -4,7 +4,7 @@ A Web-based Memory Game otherwise known as Match Match, Match Up, Memory, Pelman
 
 ## Table of Contents
 
-* [Install](#instructions)
+* [Install](#install)
 * [Instructions](#instructions)
 * [Contributing](#contributing)
 
